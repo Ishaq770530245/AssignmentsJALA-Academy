@@ -1,3 +1,14 @@
+"""Assignment 14: Exception Handling Examples.
+
+This module demonstrates various exception handling techniques in Python
+including custom exceptions, multiple except blocks, logging, and file operations.
+"""
+
+import logging
+
+logging.basicConfig(filename="errors.log", level=logging.ERROR)
+
+
 # 1. Generate an Exception
 # print(10 / 0)
 
@@ -18,35 +29,45 @@ except ValueError:
 
 # 4. Raise an Exception Manually
 def check_age(age):
+    """Check if age is 18 or above, raise ValueError if not."""
     if age < 18:
-        raise Exception("Age must be 18 or above")
-check_age(16)
+        raise ValueError("Age must be 18 or above")
+
+
+try:
+    check_age(16)
+except ValueError as err:
+    print("Handled:", err)
 
 # 5. Function That Raises Exception
 def always_fail():
-    raise Exception("Always fails")
+    """Always raise a RuntimeError for demonstration."""
+    raise RuntimeError("Always fails")
+
 
 try:
     always_fail()
-except Exception as e:
-    print("Handled:", e)
+except RuntimeError as err:
+    print("Handled:", err)
 
 # 6. Create Your Own Exception
 class InsufficientBalanceError(Exception):
+    """Custom exception for insufficient balance scenarios."""
     pass
 
-balance = 100
+
+BALANCE = 100
+WITHDRAW = 200
 try:
-    withdraw = 200
-    if withdraw > balance:
+    if WITHDRAW > BALANCE:
         raise InsufficientBalanceError("Not enough balance")
-except InsufficientBalanceError as e:
-    print(e)
+except InsufficientBalanceError as err:
+    print(err)
 
 # 7. Using finally
 try:
-    f = open("sample.txt", "r")
-    print(f.read())
+    with open("sample.txt", "r", encoding="utf-8") as file:
+        print(file.read())
 except FileNotFoundError:
     print("File not found")
 finally:
@@ -54,7 +75,8 @@ finally:
 
 # 8. File Not Found
 try:
-    f = open("missing.txt", "r")
+    with open("missing.txt", "r", encoding="utf-8") as file:
+        print(file.read())
 except FileNotFoundError:
     print("File not found")
 
@@ -87,12 +109,10 @@ else:
     print("No error, result:", x)
 
 # 13. Logging Errors
-import logging
-logging.basicConfig(filename="errors.log", level=logging.ERROR)
 try:
     print(1 / 0)
-except Exception as e:
-    logging.error(str(e))
+except ZeroDivisionError as err:
+    logging.error(str(err))
 
 # 14. Input Validation System
 while True:
